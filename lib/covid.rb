@@ -16,7 +16,7 @@ module Covid
 
     {
       overall: Utils.diff(report_2[:overall], report_1[:overall]),
-      region: Utils.diff(report_2[:regional], report_1[:regional]),
+      regional: Utils.diff(report_2[:regional], report_1[:regional]),
       dates: {
         from: report_1[:date],
         to: report_2[:date]
