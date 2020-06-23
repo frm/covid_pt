@@ -1,5 +1,6 @@
 require "rest-client"
 require "pdf-reader"
+require "nokogiri"
 
 module Covid
   class Report
@@ -102,7 +103,7 @@ module Covid
     end
 
     def download_pdf
-      response = RestClient.get(url)
+      response = RestClient.get(pdf_url)
 
       File.write(filename, response.body)
 
@@ -115,11 +116,19 @@ module Covid
       "#{day_identifier}_DGS_boletim_#{formatted_date}.pdf"
     end
 
-    def url
-      folders = date.strftime("%Y/%m")
+    def pdf_url
+      return @_pdf_url if @_pdf_url
 
-      "https://covid19.min-saude.pt/wp-content/uploads/#{folders}/#{filename}"
+      response = RestClient.get("https://covid19.min-saude.pt/relatorio-de-situacao/")
+      doc = Nokogiri::HTML(response.body)
+
+      li = doc.css("#content_easy > div.single_content > ul", "li").children.select do |li|
+        li.content.match(/#{@date.strftime("%d/%m/%Y")}/)
+      end.first
+
+      @_pdf_url = li.css("a").first.attr("href")
     end
+
 
     # Calculate the numerical identifier of the report
     # based on the 01/06/2020 report, which was #91
