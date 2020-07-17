@@ -1,8 +1,6 @@
-# Covid
+# COVID PT
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/covid`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A gem to get the COVID-19 data for Portugal.
 
 ## Installation
 
@@ -22,18 +20,41 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+There are 3 main functions to generate a report.
 
-## Development
+```ruby
+report = CovidPT.report("2020-07-01")
+# Generates the report for the given date
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+report = CovidPT.between("2020-07-01", "2020-07-02")
+# Compare the two dates directly
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+report = CovidPT.range("2020-07-01", "2020-07-05")
+# Compare every date between the two given dates
+
+# Printing a given report in different formats:
+
+# Printing in TXT format
+CovidPT::Printer.pp(report)
+
+# Printing in Markdown format
+CovidPT::Printer.md(report)
+
+# Printing in JSON
+CovidPT::Printer.json(report)
+```
+
+There is also a command line tool available:
+
+```shell
+$ covid_pt --date="2020-07-01" --output=md
+$ covid_pt --between="2020-07-01,2020-07-02" --output=json
+$ covid_pt --range="2020-07-01,2020-07-10"
+```
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/frm/covid_pt. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/frm/covid_pt/blob/master/CODE_OF_CONDUCT.md).
-
 
 ## License
 
