@@ -1,4 +1,4 @@
-module Covid
+module CovidPT
   module Utils
     extend self
 

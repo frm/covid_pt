@@ -2,7 +2,7 @@ require "rest-client"
 require "pdf-reader"
 require "nokogiri"
 
-module Covid
+module CovidPT
   class Report
     MUNICIPALITY_EDGE_CASES = {
       "Monsaraz" => "Reguengos de Monsaraz",

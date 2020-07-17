@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require "covid_pt"
+require "optparse"
+
+options = {output: :txt}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: covid_pt [OPTIONS]"
+
+  opts.on("-d", "--date=DATE", "Get info for a specific date") do |d|
+    options[:type] = :date
+    options[:date] = d
+  end
+
+  opts.on("-b", "--between=DATE1,DATE2", "Directly compare cases between two dates") do |d|
+    options[:type] = :comparison
+    dates = d.split(",")
+
+    raise OptionParser::InvalidArgument if dates.length != 2
+
+    options[:dates] = dates
+  end
+
+  opts.on("-r", "--range=DATE1,DATE2", "Cases for each date between the provided ones") do |d|
+    options[:type] = :range
+    dates = d.split(",")
+
+    raise OptionParser::InvalidArgument if dates.length != 2
+
+    options[:dates] = dates
+  end
+
+  opts.on("-o", "--output=FORMAT", "Output format (default: txt)") do |o|
+    output = {"txt" => :txt, "md" => :md, "json" => :json}[o]
+
+    raise OptionParser::InvalidArgument unless output
+
+    options[:output] = output.to_sym
+  end
+end.parse!
+
+report =
+  case options[:type]
+  when :date
+    CovidPT.at(options[:date])
+  when :comparison
+    CovidPT.compare(*options[:dates])
+  when :range
+    CovidPT.range(*options[:dates])
+  end
+
+case options[:output]
+when :txt
+  puts CovidPT::Printer.pp(report)
+when :md
+  puts CovidPT::Printer.md(report)
+when :json
+  puts CovidPT::Printer.json(report)
+end
