@@ -13,6 +13,9 @@ module Covid
 
     def initialize(date)
       @date = Date.parse(date)
+    rescue ArgumentError => e
+      puts e.message
+      puts "Argument: #{date}"
     end
 
     def generate

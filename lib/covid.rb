@@ -26,8 +26,11 @@ module Covid
   end
 
   def range(from:, to:)
-    dates = (from..to).to_a
-    reports = (from..to).map { |d| Covid::Report.new(d).generate }
+    from_date = Date.parse(from)
+    to_date = Date.parse(to)
+
+    dates = (from_date..to_date).to_a
+    reports = (from_date..to_date).map { |d| Covid::Report.new(d.to_s).generate }
 
     i = 0
     acc = {overall: {}, regional: {}, dates: dates, type: "range"}
