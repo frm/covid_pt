@@ -23,7 +23,7 @@ Or install it yourself as:
 There are 3 main functions to generate a report.
 
 ```ruby
-report = CovidPT.report("2020-07-01")
+report = CovidPT.at("2020-07-01")
 # Generates the report for the given date
 
 report = CovidPT.between("2020-07-01", "2020-07-02")
